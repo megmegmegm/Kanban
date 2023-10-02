@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="./kanban.css">
+    <title>Kanban Board</title>
+
+    <script>
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data));
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="kanban-header">
+            <strong class="kanban-header-text">Kanban Board</strong>
+        </div>
+
+        <div class="kanban-board">
+
+            <div class="kanban-block" id="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <strong>To Do</strong>
+                <div class="task-button-block">
+
+                    <button id="task-button" onclick="addTask()">New Task</button>
+                </div>
+
+                <div class="task" id="task1" draggable="true" ondragstart="drag(event)">
+                    <span>Make new board</span>
+                </div>
+            </div>
+
+            <div class="kanban-block" id="inprog" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <strong>In Progress</strong>
+            </div>
+
+            <div class="kanban-block" id="done" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <strong>Done!</strong>
+            </div>
+
+            <div class="task-button-window" id="task-button-window">
+                <strong>Task Name</strong>
+                <input type="text" id="taskname">
+                <strong>Task Description</strong>
+                <input type="text" id="taskdescription">
+                <button id="Confirm" onclick="addNewTask()">Add</button>
+
+
+                <script>
+                    var popUp = document.getElementById("task-button-window");
+                    let taskCounter = 2;
+
+                    function addTask() {
+                        popUp.style.visibility = "visible";
+                    }
+                    function closeWindow() {
+                        popUp.style.visibility = "hidden";
+                    }
+
+                    function addNewTask() {
+                        var toDoSection = document.getElementById("todo");
+                        var taskN = document.getElementById("taskname").value;
+                        var taskDesc = document.getElementById("taskdescription").value;
+                        var newTask = document.createElement("div");
+                        newTask.className = "task";
+                        let taskString = "task" + taskCounter;
+                        taskCounter++;
+                        newTask.id = taskString;
+                        newTask.setAttribute("draggable", true);
+                        newTask.addEventListener("dragstart", drag);
+                        newTask.innerHTML = taskN;
+
+                        var parentList = document.getElementById("todo");
+                        parentList.appendChild(newTask);
+                        popUp.style.visibility = "hidden";
+
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
